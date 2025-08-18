@@ -48,6 +48,10 @@ export class CarsService {
 
   update(id: string, updateCarDTO: UpdateCarDTO) {
     let carToUpdate = this.findById(id);
+
+    if (updateCarDTO.id && updateCarDTO.id !== id)
+      throw new BadRequestException(`Car id is not valid inside body`);
+
     this.cars = this.cars.map((car) => {
       if (car.id === id) {
         carToUpdate = {
@@ -61,5 +65,12 @@ export class CarsService {
     });
 
     return carToUpdate;
+  }
+
+  delete(id: string) {
+    const carToDelete = this.findById(id);
+    this.cars = this.cars.filter((car) => car.id !== carToDelete.id);
+
+    return carToDelete;
   }
 }

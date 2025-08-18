@@ -8,9 +8,11 @@ export class UpdateCarDTO {
 
   @IsString()
   @MinLength(3)
-  readonly brand: string;
+  @IsOptional()
+  readonly brand?: string;
 
   @IsString()
   @MinLength(3)
-  readonly model: string;
+  @IsOptional()
+  readonly model?: string;
 }
