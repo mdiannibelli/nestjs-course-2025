@@ -10,6 +10,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { CarsService } from './cars.service';
+import { CreateCarDTO } from './dto/create-car.dto';
 
 @Controller('cars')
 export class CarsController {
@@ -26,8 +27,9 @@ export class CarsController {
   }
 
   @Post()
-  createCar(@Body() data: any) {
-    return data;
+  /* @UsePipes(ValidationPipe) */
+  createCar(@Body() createCarDto: CreateCarDTO) {
+    return createCarDto;
   }
 
   @Patch(':id')
