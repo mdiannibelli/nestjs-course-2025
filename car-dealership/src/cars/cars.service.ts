@@ -1,6 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Car } from './interfaces/car.interface';
 import { v4 as uuid } from 'uuid';
+import { CreateCarDTO } from './dto/create-car.dto';
+import { UpdateCarDTO } from './dto/update-car.dto';
 
 @Injectable()
 export class CarsService {
@@ -8,17 +10,17 @@ export class CarsService {
     {
       id: uuid(),
       brand: 'Toyota',
-      name: 'Corolla',
+      model: 'Corolla',
     },
     {
       id: uuid(),
       brand: 'Honda',
-      name: 'Civic',
+      model: 'Civic',
     },
     {
       id: uuid(),
       brand: 'Volkswagen',
-      name: 'Gol Trend',
+      model: 'Gol Trend',
     },
   ];
 
@@ -30,5 +32,34 @@ export class CarsService {
     const car = this.cars.find((car) => car.id === id);
     if (!car) throw new BadRequestException(`Car ${id} not found`);
     return car;
+  }
+
+  create(createCarDto: CreateCarDTO) {
+    const car: Car = {
+      id: uuid(),
+      brand: createCarDto.brand,
+      model: createCarDto.model,
+    };
+
+    this.cars.push(car);
+
+    return car;
+  }
+
+  update(id: string, updateCarDTO: UpdateCarDTO) {
+    let carToUpdate = this.findById(id);
+    this.cars = this.cars.map((car) => {
+      if (car.id === id) {
+        carToUpdate = {
+          ...carToUpdate,
+          ...updateCarDTO,
+          id,
+        };
+        return carToUpdate;
+      }
+      return car;
+    });
+
+    return carToUpdate;
   }
 }
